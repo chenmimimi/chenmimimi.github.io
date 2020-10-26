@@ -28,7 +28,7 @@
 <meta property="og:description" content="执行上下文是什么？可以理解为当前代码的运行环境，在 js 中，运行环境主要包含了全局环境和函数环境，一段代码一般都有多个执行时上下文。 如何管理多个执行上下文？执行上下文是以栈（一种 LIFO 的数据结构）的方式被存放起来的，我们称之为执行上下文栈（Execution Context Stack）">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-10-26T08:14:50.000Z">
-<meta property="article:modified_time" content="2020-10-26T13:20:44.255Z">
+<meta property="article:modified_time" content="2020-10-26T13:24:09.936Z">
 <meta property="article:author" content="一个蜜">
 <meta property="article:tag" content="js基础">
 <meta name="twitter:card" content="summary">
@@ -190,7 +190,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-10-26 16:14:50 / 修改时间：21:20:44" itemprop="dateCreated datePublished" datetime="2020-10-26T16:14:50+08:00">2020-10-26</time>
+              <time title="创建时间：2020-10-26 16:14:50 / 修改时间：21:24:09" itemprop="dateCreated datePublished" datetime="2020-10-26T16:14:50+08:00">2020-10-26</time>
             </span>
 
           
@@ -231,13 +231,12 @@
 <p>  我们可以采用如下方式表示</p>
   <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">EC = &#123;</span><br><span class="line">  VO,</span><br><span class="line">  SC,</span><br><span class="line">  <span class="built_in">this</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>  一个执行上下文的生命周期分为创建和执行阶段。创建阶段主要工作是生成变量对象、建立作用域链和确定 this 指向。而执行阶段主要工作是变量赋值以及执行其它代码等。</p>
-<h5 id="变量对象"><a href="#变量对象" class="headerlink" title="变量对象"></a>变量对象</h5><p>  在执行上下文的创建阶段会生成变量对象，生成变量对象主要有以下三个过程：</p>
+<h5 id="变量对象"><a href="#变量对象" class="headerlink" title="变量对象"></a>变量对象</h5><p>在执行上下文的创建阶段会生成变量对象，生成变量对象主要有以下三个过程：</p>
 <ol>
-<li><p>检索当前上下文中的参数。该过程生成 Arguments 对象，并建立以形参变量名为属性名，形参变量值为属性值的属性；</p>
-</li>
-<li><p>检索当前上下文中的函数声明。该过程建立以函数名为属性名，函数所在内存地址引用为属性值的属性；</p>
-</li>
-<li><p>检索当前上下文中的变量声明。该过程建立以变量名为属性名，undefined 为属性值的属性（如果变量名跟已声明的形参变量名或函数名相同，则该变量声明不会干扰已经存在的这类属性）。</p>
+<li>检索当前上下文中的参数。该过程生成 Arguments 对象，并建立以形参变量名为属性名，形参变量值为属性值的属性；</li>
+<li>检索当前上下文中的函数声明。该过程建立以函数名为属性名，函数所在内存地址引用为属性值的属性；</li>
+<li>检索当前上下文中的变量声明。该过程建立以变量名为属性名，undefined 为属性值的属性（如果变量名跟已声明的形参变量名或函数名相同，则该变量声明不会干扰已经存在的这类属性）。</li>
+</ol>
 <p>伪代码来表示变量对象</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AO = &#123;</span><br><span class="line">  Arguments: &#123;&#125;,</span><br><span class="line">  ParamVariable: 具体值,  <span class="comment">//形参变量</span></span><br><span class="line">  <span class="built_in">Function</span>: <span class="xml"><span class="tag">&lt;<span class="name">function</span> <span class="attr">reference</span>&gt;</span>,</span></span><br><span class="line"><span class="xml">  Variable:具体值</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>这里相当于占个位置，就像变量先声明，后赋值</p>
@@ -278,8 +277,6 @@
 <p>当 fn2 被调用的时候，其执行上下文被创建并入栈，此时会将生成的变量对象添加进作用域链的顶端，并且将 [[scope]] 添加进作用域链</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn2_EC.SC = [fn2_EC.VO].contact(fn2.[[scope]])</span><br><span class="line">==&gt; </span><br><span class="line">fn2_EC.SC = [fn2_EC.VO, fn1_EC.VO, globalObj]</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
 <h4 id="this-指向"><a href="#this-指向" class="headerlink" title="this 指向"></a>this 指向</h4><p>this 的指向，是在函数被调用的时候确定的, 也就是执行上下文被创建时确定的</p>
 <p>关于 this 的指向，其实最主要的是三种场景，分别是全局上下文中 this、函数中 this 和构造函数中 this</p>
 <h5 id="全局上下文中-this"><a href="#全局上下文中-this" class="headerlink" title="全局上下文中 this"></a>全局上下文中 this</h5><p>在全局上下文中，this 指代全局对象</p>
