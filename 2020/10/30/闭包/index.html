@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenmimimi.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是闭包？闭包的优缺点？闭包的作用？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="闭包">
+<meta property="og:url" content="https://chenmimimi.github.io/2020/10/30/%E9%97%AD%E5%8C%85/index.html">
+<meta property="og:site_name" content="前端的日记本">
+<meta property="og:description" content="什么是闭包？闭包的优缺点？闭包的作用？">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-30T08:52:01.000Z">
+<meta property="article:modified_time" content="2020-11-02T06:34:04.007Z">
+<meta property="article:author" content="一个蜜">
+<meta property="article:tag" content="闭包">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://chenmimimi.github.io/2020/10/30/%E9%97%AD%E5%8C%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>闭包 | 前端的日记本</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端的日记本</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenmimimi.github.io/2020/10/30/%E9%97%AD%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="一个蜜">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端的日记本">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          闭包
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-30 16:52:01" itemprop="dateCreated datePublished" datetime="2020-10-30T16:52:01+08:00">2020-10-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-02 14:34:04" itemprop="dateModified" datetime="2020-11-02T14:34:04+08:00">2020-11-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">js基础</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>什么是闭包？<br>闭包的优缺点？<br>闭包的作用？</p>
+<a id="more"></a>
+
+<h5 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h5><p>变量的作用域无非就两种：全局变量和局部变量。</p>
+<p>JavasSript 语言的特别之处就在于：函数内部可以直接读取全局变量，但是在函数外部无法读取函数内部的局部变量。</p>
+<p>这个就是因为作用域链，如果你不知道，那先去<a href="https://chenmimimi.github.io/2020/10/29/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/">这里</a>补补 <strong>执行上下文</strong></p>
+<h5 id="如何从外部读取函数内部的局部变量？"><a href="#如何从外部读取函数内部的局部变量？" class="headerlink" title="如何从外部读取函数内部的局部变量？"></a>如何从外部读取函数内部的局部变量？</h5><p>正常的是做不到，就得想一些方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f1</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> n = <span class="number">999</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">        alert(n); <span class="comment">// 999</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在f1外面是不能读取n，但是，f2在f1里面，这个时候就可以拿到n，<br>既然 f2 可以读取 f1 中的局部变量，那么只要把 f2 作为返回值，我们不就可以在 f1 外部读取它的内部变量了吗！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f1</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">　<span class="keyword">var</span> n = <span class="number">999</span>;</span><br><span class="line"></span><br><span class="line">　<span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">　　alert(n);</span><br><span class="line"></span><br><span class="line">　&#125;</span><br><span class="line"></span><br><span class="line">　<span class="keyword">return</span> f2;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = f1();</span><br><span class="line"></span><br><span class="line">result(); <span class="comment">// 999</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="必包的概念"><a href="#必包的概念" class="headerlink" title="必包的概念"></a>必包的概念</h5><p>上面代码中的 f2 函数，就是闭包。</p>
+<p>各种专业文献的闭包定义都非常抽象，我的理解是: 闭包就是能够读取其他函数内部变量的函数。</p>
+<p>由于在 JavasSript 中，只有函数内部的子函数才能读取局部变量，所以说，闭包可以简单理解成”定义在一个函数内部的函数”。</p>
+<p>所以，在本质上，闭包是将函数内部和函数外部连接起来的桥梁。</p>
+<h5 id="闭包的用途"><a href="#闭包的用途" class="headerlink" title="闭包的用途"></a>闭包的用途</h5><p>闭包可以用在许多地方。它的最大用处有两个，一个是前面提到的可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中，不会在 f1 调用后被自动清除。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">　<span class="function"><span class="keyword">function</span> <span class="title">f1</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　<span class="keyword">var</span> n=<span class="number">999</span>;</span><br><span class="line">　　　　nAdd=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;n+=<span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line">　　　　<span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　　　alert(n);</span><br><span class="line">　　　　&#125;</span><br><span class="line">　　　　<span class="keyword">return</span> f2;</span><br><span class="line">　　&#125;</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">var</span> result=f1();</span><br><span class="line">　　result(); <span class="comment">// 999</span></span><br><span class="line">　　nAdd();</span><br><span class="line">　　result(); <span class="comment">// 1000</span></span><br></pre></td></tr></table></figure>
+
+<p>为什么会这样呢？原因就在于 f1 是 f2 的父函数，而 f2 被赋给了一个全局变量，这导致 f2 始终在内存中，而 f2 的存在依赖于 f1，因此 f1 也始终在内存中，不会在调用结束后，被垃圾回收机制（garbage collection）回收。</p>
+<p>这段代码中另一个值得注意的地方，就是”nAdd=function(){n+=1}”这一行，首先在nAdd前面没有使用var关键字，因此nAdd是一个全局变量，而不是局部变量。其次，nAdd的值是一个匿名函数（anonymous function），而这个匿名函数本身也是一个闭包，所以nAdd相当于是一个setter，可以在函数外部对函数内部的局部变量进行操作。</p>
+<h5 id="使用闭包的注意点"><a href="#使用闭包的注意点" class="headerlink" title="使用闭包的注意点"></a>使用闭包的注意点</h5><ul>
+<li>（1）由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。</li>
+<li>（2）闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。</li>
+</ul>
+<h5 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">&quot;The Window&quot;</span>;</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">var</span> object = &#123;</span><br><span class="line">　　　　name : <span class="string">&quot;My Object&quot;</span>,</span><br><span class="line"></span><br><span class="line">　　　　getNameFunc : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　　　<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　　　　　<span class="keyword">return</span> <span class="built_in">this</span>.name;</span><br><span class="line">　　　　　　&#125;;</span><br><span class="line"></span><br><span class="line">　　　　&#125;</span><br><span class="line"></span><br><span class="line">　　&#125;;</span><br><span class="line"></span><br><span class="line">　　alert(object.getNameFunc()());</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">&quot;The Window&quot;</span>;</span><br><span class="line"></span><br><span class="line">　　<span class="keyword">var</span> object = &#123;</span><br><span class="line">　　　　name : <span class="string">&quot;My Object&quot;</span>,</span><br><span class="line"></span><br><span class="line">　　　　getNameFunc : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　　　<span class="keyword">var</span> that = <span class="built_in">this</span>;</span><br><span class="line">　　　　　　<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　　　　　<span class="keyword">return</span> that.name;</span><br><span class="line">　　　　　　&#125;;</span><br><span class="line"></span><br><span class="line">　　　　&#125;</span><br><span class="line"></span><br><span class="line">　　&#125;;</span><br><span class="line"></span><br><span class="line">　　alert(object.getNameFunc()());</span><br></pre></td></tr></table></figure>
+
+<h5 id="闭包经典案例"><a href="#闭包经典案例" class="headerlink" title="闭包经典案例"></a>闭包经典案例</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createFunctions</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</span><br><span class="line">        result[i] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createFunctions</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</span><br><span class="line">        result[i] = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> num;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="闭包的使用场景"><a href="#闭包的使用场景" class="headerlink" title="闭包的使用场景"></a>闭包的使用场景</h5><p>封装功能时(需要使用私有的属性和方法)，函数防抖、函数节流、函数柯里化、给元素伪数组添加事件需要使用元素的索引值。</p>
+<h5 id="闭包实例–函数防抖"><a href="#闭包实例–函数防抖" class="headerlink" title="闭包实例–函数防抖"></a>闭包实例–函数防抖</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@function </span>debounce 函数防抖</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;Function&#125;</span> </span>fn 需要防抖的函数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;Number&#125;</span> </span>interval 间隔时间</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;Function&#125;</span> </span>经过防抖处理的函数</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn, interval</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> timer = <span class="literal">null</span>; <span class="comment">// 定时器</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 清除上一次的定时器</span></span><br><span class="line">        <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">        <span class="comment">// 拿到当前的函数作用域</span></span><br><span class="line">        <span class="keyword">let</span> _this = <span class="built_in">this</span>;</span><br><span class="line">        <span class="comment">// 拿到当前函数的参数数组</span></span><br><span class="line">        <span class="keyword">let</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 开启倒计时定时器</span></span><br><span class="line">        timer = <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="comment">// 通过apply传递当前函数this，以及参数</span></span><br><span class="line">            fn.apply(_this, args);</span><br><span class="line">            <span class="comment">// 默认300ms执行</span></span><br><span class="line">        &#125;, interval || <span class="number">300</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>概念：<br>就是指触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间。<br>通俗一点：在一段固定的时间内，只能触发一次函数，在多次触发事件时，只执行最后一次。</p>
+</blockquote>
+<blockquote>
+<p>使用时机：<br>搜索功能，在用户输入结束以后才开始发送搜索请求，可以使用函数防抖来实现；</p>
+</blockquote>
+<h5 id="闭包实例–函数节流"><a href="#闭包实例–函数节流" class="headerlink" title="闭包实例–函数节流"></a>闭包实例–函数节流</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@function </span>throttle 函数节流</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;Function&#125;</span> </span>fn 需要节流的函数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;Number&#125;</span> </span>interval 间隔时间</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;Function&#125;</span> </span>经过节流处理的函数</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn, interval</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> timer = <span class="literal">null</span>; <span class="comment">// 定时器</span></span><br><span class="line">    <span class="keyword">let</span> firstTime = <span class="literal">true</span>; <span class="comment">// 判断是否是第一次执行</span></span><br><span class="line">    <span class="comment">// 利用闭包</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 拿到函数的参数数组</span></span><br><span class="line">        <span class="keyword">let</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 拿到当前的函数作用域</span></span><br><span class="line">        <span class="keyword">let</span> _this = <span class="built_in">this</span>;</span><br><span class="line">        <span class="comment">// 如果是第一次执行的话，需要立即执行该函数</span></span><br><span class="line">        <span class="keyword">if</span>(firstTime) &#123;</span><br><span class="line">            <span class="comment">// 通过apply，绑定当前函数的作用域以及传递参数</span></span><br><span class="line">            fn.apply(_this, args);</span><br><span class="line">            <span class="comment">// 修改标识为null，释放内存</span></span><br><span class="line">            firstTime = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果当前有正在等待执行的函数则直接返回</span></span><br><span class="line">        <span class="keyword">if</span>(timer) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">// 开启一个倒计时定时器</span></span><br><span class="line">        timer = <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="comment">// 通过apply，绑定当前函数的作用域以及传递参数</span></span><br><span class="line">            fn.apply(_this, args);</span><br><span class="line">            <span class="comment">// 清除之前的定时器</span></span><br><span class="line">            timer = <span class="literal">null</span>;</span><br><span class="line">            <span class="comment">// 默认300ms执行一次</span></span><br><span class="line">        &#125;, interval || <span class="number">300</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>概念<br>就是限制一个函数在一定时间内只能执行一次。</p>
+<p>使用时机<br>改变浏览器窗口尺寸，可以使用函数节流，避免函数不断执行；<br>滚动条scroll事件，通过函数节流，避免函数不断执行。</p>
+<p>函数节流与函数防抖的区别：<br>我们以一个案例来讲一下它们之间的区别：<br>设定一个间隔时间为一秒，在一分钟内，不断的移动鼠标，让它触发一个函数，打印一些内容。</p>
+<p>函数防抖：会打印1次，在鼠标停止移动的一秒后打印。<br>函数节流：会打印60次，因为在一分钟内有60秒，每秒会触发一次。<br>总结：节流是为了限制函数的执行次数，而防抖是为了限制函数的执行时机。</p>
+<p>函数节流与函数防抖的使用</p>
+<p>此处使用一个对象的方法，主要为了测试this指向绑定的问题，调用的时候传递参数问题等。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params">a,b</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a,b);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> throttleLog = throttle(log, <span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> debounceLog = debounce(log, <span class="number">1000</span>);</span><br><span class="line"><span class="keyword">let</span> a  = &#123;</span><br><span class="line">    b: throttleLog,</span><br><span class="line">    c: debounceLog</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">document</span>.body.onmousemove = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    a.b(<span class="string">&#x27;throttle&#x27;</span>, <span class="string">&#x27;log&#x27;</span>);</span><br><span class="line">    a.c(<span class="string">&#x27;debounce&#x27;</span>, <span class="string">&#x27;log&#x27;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h5 id="闭包实例–给元素伪数组添加事件"><a href="#闭包实例–给元素伪数组添加事件" class="headerlink" title="闭包实例–给元素伪数组添加事件"></a>闭包实例–给元素伪数组添加事件</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DOM操作</span></span><br><span class="line"><span class="keyword">let</span> li = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;li&#x27;</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; li.length; i++) &#123;</span><br><span class="line">    (<span class="function"><span class="keyword">function</span>(<span class="params">i</span>)</span>&#123;</span><br><span class="line">        li[i].onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            alert(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="闭包实例–不使用循环返回数组"><a href="#闭包实例–不使用循环返回数组" class="headerlink" title="闭包实例–不使用循环返回数组"></a>闭包实例–不使用循环返回数组</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getArr</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> num = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">let</span> arr = [];</span><br><span class="line">    <span class="keyword">return</span> (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        arr.unshift(num);</span><br><span class="line">        num--;</span><br><span class="line">        <span class="keyword">if</span>(num &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">arguments</span>.callee();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;)()</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(getArr());  <span class="comment">//[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="闭包实例–函数柯里化"><a href="#闭包实例–函数柯里化" class="headerlink" title="闭包实例–函数柯里化"></a>闭包实例–函数柯里化</h5><p><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903882208837645">https://juejin.im/post/6844903882208837645</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%97%AD%E5%8C%85/" rel="tag"># 闭包</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/29/%E5%8F%AF%E6%9E%9A%E4%B8%BE%E6%80%A7enumerable/" rel="prev" title="可枚举性enumerable">
+      <i class="fa fa-chevron-left"></i> 可枚举性enumerable
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/02/call%E3%80%81apply%E3%80%81bind/" rel="next" title="call、apply、bind">
+      call、apply、bind <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">1.</span> <span class="nav-text">变量作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BB%8E%E5%A4%96%E9%83%A8%E8%AF%BB%E5%8F%96%E5%87%BD%E6%95%B0%E5%86%85%E9%83%A8%E7%9A%84%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">如何从外部读取函数内部的局部变量？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BF%85%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">3.</span> <span class="nav-text">必包的概念</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E7%9A%84%E7%94%A8%E9%80%94"><span class="nav-number">4.</span> <span class="nav-text">闭包的用途</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%97%AD%E5%8C%85%E7%9A%84%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="nav-number">5.</span> <span class="nav-text">使用闭包的注意点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">思考题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B"><span class="nav-number">7.</span> <span class="nav-text">闭包经典案例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">8.</span> <span class="nav-text">闭包的使用场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E5%AE%9E%E4%BE%8B%E2%80%93%E5%87%BD%E6%95%B0%E9%98%B2%E6%8A%96"><span class="nav-number">9.</span> <span class="nav-text">闭包实例–函数防抖</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E5%AE%9E%E4%BE%8B%E2%80%93%E5%87%BD%E6%95%B0%E8%8A%82%E6%B5%81"><span class="nav-number">10.</span> <span class="nav-text">闭包实例–函数节流</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E5%AE%9E%E4%BE%8B%E2%80%93%E7%BB%99%E5%85%83%E7%B4%A0%E4%BC%AA%E6%95%B0%E7%BB%84%E6%B7%BB%E5%8A%A0%E4%BA%8B%E4%BB%B6"><span class="nav-number">11.</span> <span class="nav-text">闭包实例–给元素伪数组添加事件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E5%AE%9E%E4%BE%8B%E2%80%93%E4%B8%8D%E4%BD%BF%E7%94%A8%E5%BE%AA%E7%8E%AF%E8%BF%94%E5%9B%9E%E6%95%B0%E7%BB%84"><span class="nav-number">12.</span> <span class="nav-text">闭包实例–不使用循环返回数组</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E5%AE%9E%E4%BE%8B%E2%80%93%E5%87%BD%E6%95%B0%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="nav-number">13.</span> <span class="nav-text">闭包实例–函数柯里化</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">一个蜜</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/chenmimimi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;chenmimimi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一个蜜</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
