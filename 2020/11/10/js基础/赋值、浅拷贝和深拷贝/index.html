@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenmimimi.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是深拷贝和浅拷贝？ 怎么实现一个深拷贝？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解析赋值、浅拷贝和深拷贝">
+<meta property="og:url" content="https://chenmimimi.github.io/2020/11/10/js%E5%9F%BA%E7%A1%80/%E8%B5%8B%E5%80%BC%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B7%B1%E6%8B%B7%E8%B4%9D/index.html">
+<meta property="og:site_name" content="前端的日记本">
+<meta property="og:description" content="什么是深拷贝和浅拷贝？ 怎么实现一个深拷贝？">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-10T09:24:05.000Z">
+<meta property="article:modified_time" content="2020-11-10T12:20:56.075Z">
+<meta property="article:author" content="一个蜜">
+<meta property="article:tag" content="拷贝">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://chenmimimi.github.io/2020/11/10/js%E5%9F%BA%E7%A1%80/%E8%B5%8B%E5%80%BC%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B7%B1%E6%8B%B7%E8%B4%9D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>解析赋值、浅拷贝和深拷贝 | 前端的日记本</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端的日记本</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenmimimi.github.io/2020/11/10/js%E5%9F%BA%E7%A1%80/%E8%B5%8B%E5%80%BC%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B7%B1%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="一个蜜">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端的日记本">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解析赋值、浅拷贝和深拷贝
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-10 17:24:05 / 修改时间：20:20:56" itemprop="dateCreated datePublished" datetime="2020-11-10T17:24:05+08:00">2020-11-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">js基础</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/11/10/js%E5%9F%BA%E7%A1%80/%E8%B5%8B%E5%80%BC%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B7%B1%E6%8B%B7%E8%B4%9D/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/10/js%E5%9F%BA%E7%A1%80/%E8%B5%8B%E5%80%BC%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B7%B1%E6%8B%B7%E8%B4%9D/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>什么是深拷贝和浅拷贝？</p>
+<p>怎么实现一个深拷贝？</p>
+<a id="more"></a>
+
+<h5 id="核心内容"><a href="#核心内容" class="headerlink" title="核心内容"></a>核心内容</h5><p>深拷贝和浅拷贝最根本的区别在于是否真正获取一个对象的复制实体，而不是引用。<br>假设B复制了A，修改A的时候，看B是否发生变化：</p>
+<p>如果B跟着也变了，说明是浅拷贝，拿人手短！（修改堆内存中的同一个值）</p>
+<p>如果B没有改变，说明是深拷贝，自食其力！（修改堆内存中的不同的值）</p>
+<h5 id="赋值"><a href="#赋值" class="headerlink" title="赋值"></a>赋值</h5><p>根本js有两种数据类型，赋值也可分为两种：</p>
+<ul>
+<li>基本数据类型：赋值，赋值之后两个变量互不影响</li>
+<li>引用数据类型：赋值，两个变量有相同的引用，都指向同一个引用，相互之间有影响</li>
+</ul>
+<blockquote>
+<p>🤔️  那基本类型赋值不就是深拷贝吗？</p>
+</blockquote>
+<h5 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h5><p>创建一个新对象，这个对象有着原始对象属性值的一份精确拷贝。如果属性是基本类型，拷贝的就是基本类型的值，如果属性是引用类型，拷贝的就是内存地址 ，所以如果其中一个对象改变了这个地址，就会影响到另一个对象。</p>
+<blockquote>
+<p>🤔️  那如果这个对象只有一层，而且都是基本数据，那对这个对象的浅拷贝其实就相当于深拷贝</p>
+</blockquote>
+<h5 id="浅拷贝使用场景"><a href="#浅拷贝使用场景" class="headerlink" title="浅拷贝使用场景"></a>浅拷贝使用场景</h5><ol>
+<li>Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">    name: <span class="string">&quot;baby&quot;</span>,</span><br><span class="line">    other: &#123;</span><br><span class="line">        price: <span class="string">&quot;45&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> b = <span class="built_in">Object</span>.assign(&#123;&#125;, a);</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">// 	name: &quot;baby&quot;,</span></span><br><span class="line"><span class="comment">// 	other: &#123;price: &quot;45&quot;&#125;</span></span><br><span class="line"><span class="comment">// &#125; </span></span><br><span class="line"></span><br><span class="line">a.name = <span class="string">&quot;chenmi&quot;</span>;</span><br><span class="line">a.other.price = <span class="string">&quot;无价&quot;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">// 	name: &quot;chenmi&quot;,</span></span><br><span class="line"><span class="comment">// 	other: &#123;price: &quot;无价&quot;&#125;</span></span><br><span class="line"><span class="comment">// &#125; </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">// 	name: &quot;baby&quot;,</span></span><br><span class="line"><span class="comment">// 	book: &#123;title: price: &quot;无价&quot;&#125;</span></span><br><span class="line"><span class="comment">// &#125; </span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过上面这个卖孩子的🌰 我们可以知道，拷贝的第一层里面的引用数据还是会受到原来数据的影响</p>
+</blockquote>
+<blockquote>
+<p>🤔️ 如果区分深浅拷贝是根据：拷贝的数据是否和原来数据的相互影响，那上面的🌰，如果都是基本数据，那它就是深拷贝，如果包括引用数据类型，那它就是浅拷贝<br>如果区分是根据拷贝数据是否超过一层不受影响：那上面的🌰，就是浅拷贝，只有里面所有的层都不受影响才是深拷贝</p>
+</blockquote>
+<blockquote>
+<p>也不知道上面我的理解对不对，网上两个版本都有</p>
+</blockquote>
+<ol start="2">
+<li>展开语法 Spread</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">    name: <span class="string">&quot;baby&quot;</span>,</span><br><span class="line">    other: &#123;</span><br><span class="line">        price: <span class="string">&quot;45&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> b = &#123;...a&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">// 	name: &quot;baby&quot;,</span></span><br><span class="line"><span class="comment">// 	other: &#123;price: &quot;45&quot;&#125;</span></span><br><span class="line"><span class="comment">// &#125; </span></span><br><span class="line"></span><br><span class="line">a.name = <span class="string">&quot;chenmi&quot;</span>;</span><br><span class="line">a.other.price = <span class="string">&quot;无价&quot;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">// 	name: &quot;chenmi&quot;,</span></span><br><span class="line"><span class="comment">// 	other: &#123;price: &quot;无价&quot;&#125;</span></span><br><span class="line"><span class="comment">// &#125; </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">// 	name: &quot;baby&quot;,</span></span><br><span class="line"><span class="comment">// 	book: &#123;title: price: &quot;无价&quot;&#125;</span></span><br><span class="line"><span class="comment">// &#125; </span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个和Object.assign()的结果一样</p>
+</blockquote>
+<ol start="3">
+<li>Array.prototype.slice()</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = [<span class="number">0</span>, <span class="string">&quot;1&quot;</span>, [<span class="number">2</span>, <span class="number">3</span>]];</span><br><span class="line"><span class="keyword">let</span> b = a.slice(<span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// [&quot;1&quot;, [2, 3]]</span></span><br><span class="line"></span><br><span class="line">a[<span class="number">1</span>] = <span class="string">&quot;99&quot;</span>;</span><br><span class="line">a[<span class="number">2</span>][<span class="number">0</span>] = <span class="number">4</span>;</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line"><span class="comment">// [0, &quot;99&quot;, [4, 3]]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">//  [&quot;1&quot;, [4, 3]]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>改变 a[1] 之后 b[0] 的值并没有发生变化，但改变 a[2][0] 之后，相应的 b[1][0] 的值也发生变化。说明 slice() 方法是浅拷贝，相应的还有concat等，在工作中面对复杂数组结构要额外注意。</p>
+</blockquote>
+<h5 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h5><p>深拷贝会拷贝所有的属性，并拷贝属性指向的动态分配的内存。当对象和它所引用的对象一起拷贝时即发生深拷贝。深拷贝相比于浅拷贝速度较慢并且花销较大。拷贝前后两个对象互不影响。</p>
+<h6 id="深拷贝使用场景"><a href="#深拷贝使用场景" class="headerlink" title="深拷贝使用场景"></a>深拷贝使用场景</h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(object))</span><br></pre></td></tr></table></figure>
+<p>这个不管是对象还是数组，都能实现深拷贝</p>
+<p>但是该方法有以下几个问题。</p>
+<ul>
+<li><p>1、会忽略 undefined</p>
+</li>
+<li><p>2、会忽略 symbol</p>
+</li>
+<li><p>3、不能序列化函数</p>
+</li>
+<li><p>4、不能解决循环引用的对象</p>
+</li>
+<li><p>5、不能正确处理new Date()</p>
+</li>
+<li><p>6、不能处理正则</p>
+</li>
+</ul>
+<p>undefined、symbol 和函数这三种情况，会直接忽略。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">&#x27;muyiy&#x27;</span>,</span><br><span class="line">    a: <span class="literal">undefined</span>,</span><br><span class="line">    b: <span class="built_in">Symbol</span>(<span class="string">&#x27;muyiy&#x27;</span>),</span><br><span class="line">    c: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> b = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123;name: &quot;muyiy&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>循环引用情况下，会报错</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    a: <span class="number">1</span>,</span><br><span class="line">    b: &#123;</span><br><span class="line">        c: <span class="number">2</span>,</span><br><span class="line">   		d: <span class="number">3</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.a = obj.b;</span><br><span class="line">obj.b.c = obj.a;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line"><span class="comment">// Uncaught TypeError: Converting circular structure to JSON</span></span><br></pre></td></tr></table></figure>
+
+<p>new Date 情况下，转换结果不正确</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line"><span class="comment">// Mon Dec 24 2018 10:59:14 GMT+0800 (China Standard Time)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">JSON</span>.stringify(<span class="keyword">new</span> <span class="built_in">Date</span>());</span><br><span class="line"><span class="comment">// &quot;&quot;2018-12-24T02:59:25.776Z&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(<span class="keyword">new</span> <span class="built_in">Date</span>()));</span><br><span class="line"><span class="comment">// &quot;2018-12-24T02:59:41.523Z&quot;</span></span><br></pre></td></tr></table></figure>
+<p>解决方法转成字符串或者时间戳就好了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> date = (<span class="keyword">new</span> <span class="built_in">Date</span>()).valueOf();</span><br><span class="line"><span class="comment">// 1545620645915</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">JSON</span>.stringify(date);</span><br><span class="line"><span class="comment">// &quot;1545620673267&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(date));</span><br><span class="line"><span class="comment">// 1545620658688</span></span><br></pre></td></tr></table></figure>
+
+<p>正则情况下，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    name: <span class="string">&quot;muyiy&quot;</span>,</span><br><span class="line">    a: <span class="regexp">/&#x27;123&#x27;/</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(obj);</span><br><span class="line"><span class="comment">// &#123;name: &quot;muyiy&quot;, a: /&#x27;123&#x27;/&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line"><span class="built_in">console</span>.log(b);</span><br><span class="line"><span class="comment">// &#123;name: &quot;muyiy&quot;, a: &#123;&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>PS：为什么会存在这些问题可以学习一下 JSON</p>
+<p>除了上面介绍的深拷贝方法，常用的还有jQuery.extend() 和 lodash.cloneDeep()</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8B%B7%E8%B4%9D/" rel="tag"># 拷贝</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/09/%E7%BD%91%E7%BB%9C/%E9%A1%B5%E9%9D%A2%E8%BE%93%E5%85%A5URL/" rel="prev" title="页面输入URL">
+      <i class="fa fa-chevron-left"></i> 页面输入URL
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/10/js%E5%9F%BA%E7%A1%80/JSON/" rel="next" title="JSON">
+      JSON <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%86%85%E5%AE%B9"><span class="nav-number">1.</span> <span class="nav-text">核心内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">赋值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%85%E6%8B%B7%E8%B4%9D"><span class="nav-number">3.</span> <span class="nav-text">浅拷贝</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text">浅拷贝使用场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="nav-number">5.</span> <span class="nav-text">深拷贝</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">5.1.</span> <span class="nav-text">深拷贝使用场景</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">一个蜜</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/chenmimimi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;chenmimimi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一个蜜</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = '';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'gY1RTI22stkCSVU2vQltfE69-gzGzoHsz',
+      appKey     : 'NRBienzHu7QyfjcMaAeWSssh',
+      placeholder: "说点什么呢",
+      avatar     : 'robohash',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
