@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chenmimimi.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在总结弄清楚继承之前，我们先来总结一下封装相关的东西">
+<meta property="og:type" content="article">
+<meta property="og:title" content="封装">
+<meta property="og:url" content="https://chenmimimi.github.io/2021/03/01/js%E5%9F%BA%E7%A1%80/%E5%B0%81%E8%A3%85/index.html">
+<meta property="og:site_name" content="前端的日记本">
+<meta property="og:description" content="在总结弄清楚继承之前，我们先来总结一下封装相关的东西">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-01T09:40:50.000Z">
+<meta property="article:modified_time" content="2021-03-02T03:37:18.385Z">
+<meta property="article:author" content="一个蜜">
+<meta property="article:tag" content="封装, class">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://chenmimimi.github.io/2021/03/01/js%E5%9F%BA%E7%A1%80/%E5%B0%81%E8%A3%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>封装 | 前端的日记本</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">前端的日记本</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://chenmimimi.github.io/2021/03/01/js%E5%9F%BA%E7%A1%80/%E5%B0%81%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="一个蜜">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端的日记本">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          封装
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-01 17:40:50" itemprop="dateCreated datePublished" datetime="2021-03-01T17:40:50+08:00">2021-03-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-02 11:37:18" itemprop="dateModified" datetime="2021-03-02T11:37:18+08:00">2021-03-02</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/03/01/js%E5%9F%BA%E7%A1%80/%E5%B0%81%E8%A3%85/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/01/js%E5%9F%BA%E7%A1%80/%E5%B0%81%E8%A3%85/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在总结弄清楚继承之前，我们先来总结一下封装相关的东西</p>
+<a id="more"></a>
+
+<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h4><h5 id="1-私有属性和公有属性"><a href="#1-私有属性和公有属性" class="headerlink" title="1. 私有属性和公有属性"></a>1. 私有属性和公有属性</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">fuction Cat (name, color) &#123;</span><br><span class="line">  <span class="keyword">var</span> heart = <span class="string">&#x27;❤️&#x27;</span>;</span><br><span class="line">  <span class="keyword">var</span> stomach = <span class="string">&#x27;胃&#x27;</span>;</span><br><span class="line">  <span class="keyword">var</span> heartbeat = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(heart + <span class="string">&#x27;跳&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">this</span>.color = color;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line">  <span class="built_in">this</span>.jump = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.heartbeat(); <span class="comment">// 能跳起来，表明这只猫是活的，心也就是跳的</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我跳起来了，来追我啊&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat(<span class="string">&#x27;guaiguai&#x27;</span>, <span class="string">&#x27;white&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(guaiguai);</span><br><span class="line">guaiguai.jump();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在函数内用var定义的就是私有的<br>在函数内用this承接的就是公有</p>
+</blockquote>
+<h5 id="2-静态属性方法和公有属性方法"><a href="#2-静态属性方法和公有属性方法" class="headerlink" title="2.静态属性方法和公有属性方法"></a>2.静态属性方法和公有属性方法</h5><p>继续上面的，添加以下代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Cat.descript = <span class="string">&#x27;我这个构造函数是用来生产猫的&#x27;</span>;</span><br><span class="line">Cat.actingCute = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;一听到猫，我就知道它在卖萌&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype.cleanTheBody = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;我会用唾液清理身体&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在构造函数上也就是使用Cat.xxx定义的是静态属性和方法<br>在构造函数内使用this设置，或者设置在构造函数原型对象上比如Cat.prototype.xxx，就是公有属性和方法(实例方法)</p>
+</blockquote>
+<p>静态属性的方法的例子：Promise.all(), Promise.race(), Object.assign(), Array.from()</p>
+<p>实例方法：push(), shift(), 等等他们实际上存在Array.prototype上面 Array.prototype.push()</p>
+<h5 id="3-实例自身的属性和构造函数的原型对象的属性"><a href="#3-实例自身的属性和构造函数的原型对象的属性" class="headerlink" title="3.实例自身的属性和构造函数的原型对象的属性"></a>3.实例自身的属性和构造函数的原型对象的属性</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype.prototypPro = <span class="string">&#x27;我是构造函数原型对象上面的属性&#x27;</span>;</span><br><span class="line">Cat.prototype.cleanTheBody = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;我会用唾液清理身体&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat(<span class="string">&#x27;guaiguai&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(guaiguai);</span><br><span class="line"><span class="built_in">console</span>.log(guaiguai.name);</span><br><span class="line"><span class="built_in">console</span>.log(guaiguai.prototypePro);</span><br><span class="line">guaiguai.cleanTheBody();</span><br></pre></td></tr></table></figure>
+
+<p>打印结果</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Cat &#123;<span class="attr">name</span>: <span class="string">&quot;guaiguai&quot;</span>&#125;</span><br><span class="line"><span class="string">&#x27;guaiguai&#x27;</span></span><br><span class="line"><span class="string">&#x27;我是构造函数原型对象上的属性&#x27;</span></span><br><span class="line"><span class="string">&#x27;我会用唾液清洁身体&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>定义在构造函数的原型对象的属性和方法，虽然不能直接表现在实例对象上面，但是实例对象可以访问或者调用它们</p>
+</blockquote>
+<h5 id="4-实例自身属性和构造函数原型对象的属性区别"><a href="#4-实例自身属性和构造函数原型对象的属性区别" class="headerlink" title="4. 实例自身属性和构造函数原型对象的属性区别"></a>4. 实例自身属性和构造函数原型对象的属性区别</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.name = name;</span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype.prototypePro = <span class="string">&#x27;我是构造函数原型对象上面的属性&#x27;</span>;</span><br><span class="line">Cat.prototype.cleanTheBody = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;我会用唾液清理身体&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat(<span class="string">&#x27;guaiguai&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(key <span class="keyword">in</span> guaiguai) &#123;</span><br><span class="line">  <span class="keyword">if</span>(guaiguai.hasOwnProperty(key)) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我是自身属性&#x27;</span> + key);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我不是自身属性&#x27;</span> + key);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;-分隔符-&#x27;</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.key(guaiguai));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyNames(guaiguai));</span><br></pre></td></tr></table></figure>
+
+<p>打印结果</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">我是自身属性name</span><br><span class="line">我不是自身属性PrototypePro</span><br><span class="line">我不是自身属性cleanTheBody</span><br><span class="line">-分隔符-</span><br><span class="line">[<span class="string">&#x27;name&#x27;</span>]</span><br><span class="line">[<span class="string">&#x27;name&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>前提： 属性的enumerable为true<br>for in 可以遍历实例自身属性和构造函数原型对象的属性<br>Object.key 和 Object.getOwnPropertyNames只能获取实例自身属性<br>可以通过 .hasOwnProperty 判断一个属性是不是该实例的自身属性</p>
+</blockquote>
+<h5 id="5-检查上面的是否掌握"><a href="#5-检查上面的是否掌握" class="headerlink" title="5. 检查上面的是否掌握"></a>5. 检查上面的是否掌握</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params">name, sex</span>) </span>&#123;  </span><br><span class="line">  <span class="built_in">this</span>.name = name</span><br><span class="line">  <span class="built_in">this</span>.sex = sex  </span><br><span class="line">  <span class="keyword">var</span> evil = <span class="string">&#x27;我很邪恶&#x27;</span>  </span><br><span class="line">  <span class="keyword">var</span> pickNose = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我会扣鼻子但不让你看见&#x27;</span>)  </span><br><span class="line">  &#125;  </span><br><span class="line">  <span class="built_in">this</span>.drawing = <span class="function"><span class="keyword">function</span> (<span class="params">type</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我要画一幅&#x27;</span> + type)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Person.fight = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;  </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;打架&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">Person.prototype.wc = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;  </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;我是个人我会wc&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> p1 = <span class="keyword">new</span> Person(<span class="string">&#x27;lindaidai&#x27;</span>, <span class="string">&#x27;boy&#x27;</span>)</span><br><span class="line"><span class="built_in">console</span>.log(p1.name)</span><br><span class="line"><span class="built_in">console</span>.log(p1.evil)</span><br><span class="line">p1.drawing(<span class="string">&#x27;国画&#x27;</span>)</span><br><span class="line">p1.pickNose()</span><br><span class="line">p1.fight()</span><br><span class="line">p1.wc()</span><br><span class="line">Person.fight()</span><br><span class="line">Person.wc()</span><br><span class="line"><span class="built_in">console</span>.log(Person.sex)</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lindaidai</span><br><span class="line"><span class="literal">undefined</span></span><br><span class="line">我要画一幅画画</span><br><span class="line">Uncaught <span class="built_in">TypeError</span>: p1.pickNose is not a <span class="function"><span class="keyword">function</span></span></span><br><span class="line"><span class="function"><span class="title">Uncaught</span> <span class="title">TypeError</span>: <span class="title">p1</span>.<span class="title">fight</span> <span class="title">is</span> <span class="title">not</span> <span class="title">a</span> <span class="title">function</span></span></span><br><span class="line"><span class="function">我是个人我会<span class="title">wc</span></span></span><br><span class="line"><span class="function">打架</span></span><br><span class="line"><span class="function"><span class="title">Uncaught</span> <span class="title">TypeError</span>: <span class="title">Person</span>.<span class="title">wc</span> <span class="title">is</span> <span class="title">not</span> <span class="title">a</span> <span class="title">function</span></span></span><br><span class="line"><span class="function"><span class="title">undefined</span></span></span><br></pre></td></tr></table></figure>
+
+<h5 id="6-如果实例自身属性和构造函数原型对象的属性重名"><a href="#6-如果实例自身属性和构造函数原型对象的属性重名" class="headerlink" title="6. 如果实例自身属性和构造函数原型对象的属性重名"></a>6. 如果实例自身属性和构造函数原型对象的属性重名</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span> (<span class="params"></span>) </span>&#123;  </span><br><span class="line">  <span class="built_in">this</span>.color = <span class="string">&#x27;white&#x27;</span>  </span><br><span class="line">  <span class="built_in">this</span>.getColor = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.color)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype.color = <span class="string">&#x27;black&#x27;</span></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat()</span><br><span class="line">cat.getColor()  <span class="comment">// white</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>构造函数本身自己可以找到，直接就返回了。<br>原型链查找概念：当访问一个对象的属性和方法时，它不仅在该对象上查找，还会查找该对象的原型，以及该对象的原型的原型，一层层往上找，知道找到一个名字匹配的属性和方法或者到达原型了的末端（null)</p>
+</blockquote>
+<h5 id="7-实例的原型对象的原型对象"><a href="#7-实例的原型对象的原型对象" class="headerlink" title="7. 实例的原型对象的原型对象"></a>7. 实例的原型对象的原型对象</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span> (<span class="params"></span>) </span>&#123;  </span><br><span class="line">  <span class="built_in">this</span>.color = <span class="string">&#x27;white&#x27;</span></span><br><span class="line">  <span class="built_in">this</span>.getColor = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.color)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype.color = <span class="string">&#x27;black&#x27;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.color = <span class="string">&#x27;yellow&#x27;</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.feature = <span class="string">&#x27;cute&#x27;</span></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat()</span><br><span class="line">cat.getColor() <span class="comment">// white</span></span><br><span class="line"><span class="built_in">console</span>.log(cat) <span class="comment">// Cat &#123;color: &quot;white&quot;, getColor: ƒ&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(cat.feature) <span class="comment">// cute</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>实例的原型对象本质是一个对象，它的__proto__也就是Object.prototype</p>
+</blockquote>
+<h5 id="8-Object-prototype的方法"><a href="#8-Object-prototype的方法" class="headerlink" title="8. Object.prototype的方法"></a>8. Object.prototype的方法</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="string">&#x27;obj&#x27;</span> &#125;;</span><br><span class="line"><span class="built_in">console</span>.log(obj.toString());</span><br><span class="line"><span class="built_in">console</span>.log(obj.hasOwnProperty(<span class="string">&#x27;name&#x27;</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype);</span><br></pre></td></tr></table></figure>
+<p>obj本质是一个Object, const obj = { name: ‘obj’ } 实际上调用了new Object:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;obj&#x27;</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>这样我们当然可以使用Object.prototype上面的方法</p>
+<h5 id="9-总结-构造函数"><a href="#9-总结-构造函数" class="headerlink" title="9. 总结 - 构造函数"></a>9. 总结 - 构造函数</h5><p>定义：把客观事物封装成抽象的类，隐藏属性和方法，仅对外公开接口</p>
+<h6 id="1-私有属性、公有属性、静态属性概念："><a href="#1-私有属性、公有属性、静态属性概念：" class="headerlink" title="1. 私有属性、公有属性、静态属性概念："></a>1. 私有属性、公有属性、静态属性概念：</h6><ul>
+<li>私有属性和方法：只能在构造函数内部访问不能在外部访问（在构造函数内使用var声明的属性）</li>
+<li>公有属性和方法（实例方法）：对象外可以访问对象内的属性和方法（在构造函数内使用this设置，或者设置在构造函数原型对象上，比如Cat.prototype.xxx）</li>
+<li>静态属性和方法：定义在构造函数上的方法，不需要实例就可以调用，比如Object.assign()</li>
+</ul>
+<h6 id="2-实例对象上的属性和构造函数原型对象的属性："><a href="#2-实例对象上的属性和构造函数原型对象的属性：" class="headerlink" title="2. 实例对象上的属性和构造函数原型对象的属性："></a>2. 实例对象上的属性和构造函数原型对象的属性：</h6><ul>
+<li>定义在构造函数原型对象的属性和方法，虽然不能直接表现在实例对象上面，但是实例对象可以访问和调用它们</li>
+<li>当访问一个对象的属性和方法时，不仅在该对象上查找，还会查找该对象的原型，以及该对象的原型的原型，一层层往上，知道找到名字匹配的属性和方法，或者到达原型链的末端（null）</li>
+</ul>
+<h6 id="3-遍历实例对象属性的方法："><a href="#3-遍历实例对象属性的方法：" class="headerlink" title="3. 遍历实例对象属性的方法："></a>3. 遍历实例对象属性的方法：</h6><ul>
+<li>使用for…in…能获取实例对象的属性和原型链的属性</li>
+<li>使用Object.key()和Object.getOwnPropertyNames()只能获取实例对象的属性</li>
+<li>可以通过.hasOwnProperty()方法传入属性名来判断一个属性是不是实例自身属性</li>
+</ul>
+<h4 id="ES6之后的封装"><a href="#ES6之后的封装" class="headerlink" title="ES6之后的封装"></a>ES6之后的封装</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;&#125;</span><br><span class="line">  toString() &#123;&#125;</span><br><span class="line">  toValue() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">Cat.prototype = &#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;&#125;</span><br><span class="line">  toString () &#123;&#125;</span><br><span class="line">  toValue () &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-将上面例子1换成class版本"><a href="#1-将上面例子1换成class版本" class="headerlink" title="1. 将上面例子1换成class版本"></a>1. 将上面例子1换成class版本</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> (<span class="title">name</span>, <span class="title">color</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span> () &#123;</span><br><span class="line">    <span class="keyword">var</span> heart = <span class="string">&#x27;❤️&#x27;</span>;</span><br><span class="line">    <span class="keyword">var</span> stomach = <span class="string">&#x27;胃&#x27;</span>;</span><br><span class="line">    <span class="keyword">var</span> heartbeat = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(heart + <span class="string">&#x27;跳&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.color = color;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.jump = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      heartbeat(); <span class="comment">// 能跳起来，表明这只猫是活的，心也就是跳的</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;我跳起来了，来追我啊&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat(<span class="string">&#x27;guaiguai&#x27;</span>, <span class="string">&#x27;white&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(guaiguai);</span><br><span class="line">guaiguai.jump();</span><br></pre></td></tr></table></figure>
+<p>当你使用class时候，它会默认调用constructor这个函数，来接收一些参数，并创建一个新的实例对象(this)并将它返回，因此被成为constructor构造方法</p>
+<p>如果你的class没有定义constructor,它也会隐式生成一个constructor方法</p>
+<h5 id="2-弄懂在类中定义属性和方法"><a href="#2-弄懂在类中定义属性和方法" class="headerlink" title="2. 弄懂在类中定义属性和方法"></a>2. 弄懂在类中定义属性和方法</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">constructor</span> () &#123;    </span><br><span class="line">    <span class="keyword">var</span> heart = <span class="string">&#x27;❤️&#x27;</span>    </span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;guaiguai&#x27;</span>    </span><br><span class="line">    <span class="built_in">this</span>.jump = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;  </span><br><span class="line">  &#125; </span><br><span class="line">  color = <span class="string">&#x27;white&#x27;</span></span><br><span class="line">  cleanTheBody = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我会用唾液清洁身体&#x27;</span>)  </span><br><span class="line">  &#125;  </span><br><span class="line">  hideTheShit () &#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我在臭臭完之后会把它藏起来&#x27;</span>)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat()</span><br><span class="line"><span class="built_in">console</span>.log(guaiguai) <span class="comment">// Cat &#123; color: &quot;white&quot;, name: &quot;guaiguai&quot;, cleanTheBody: ƒ, jump: ƒ&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.keys(guaiguai))  <span class="comment">// [&quot;color&quot;, &quot;cleanTheBody&quot;, &quot;name&quot;, &quot;jump&quot;]</span></span><br><span class="line">guaiguai.cleanTheBody() <span class="comment">// 我会用唾液清洁身体</span></span><br><span class="line">guaiguai.hideTheShit() <span class="comment">// 我在臭臭完之后会把它藏起来</span></span><br></pre></td></tr></table></figure>
+
+<p>用了4中方法定义属性：</p>
+<ol>
+<li>在constructor中var一个变量，它只存在于constructor这个构造函数中</li>
+<li>在constructor使用this定义的属性和变量会被定义到实例上面</li>
+<li>在class使用 = 来定一个属性和方法，效果与第2点相同，会被定义到实例上面</li>
+<li>在class直接定义一个方法，会被添加到原型对象prototype上面</li>
+</ol>
+<blockquote>
+<p>在类的所有方法都定义在类的prototype属性上面</p>
+</blockquote>
+<h5 id="3-在class定义静态属性和方法"><a href="#3-在class定义静态属性和方法" class="headerlink" title="3. 在class定义静态属性和方法"></a>3. 在class定义静态属性和方法</h5><ol>
+<li>class本质是一个对象，所以也可以使用Cat.xx这种方法定义</li>
+<li>使用static标识符表示它是一个静态的属性和方法</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">static</span> descript = <span class="string">&#x27;我这个类是用来生产出一只猫的&#x27;</span>  </span><br><span class="line">  <span class="keyword">static</span> actingCute () &#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;一听到猫我就想到了它会卖萌&#x27;</span>)  </span><br><span class="line">  &#125;	<span class="comment">// static actingCute = function () &#123;&#125; // 这种写法也是设置静态的方法&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">constructor</span> (name, color) &#123;    </span><br><span class="line">    <span class="keyword">var</span> heart = <span class="string">&#x27;❤️&#x27;</span>    </span><br><span class="line">    <span class="keyword">var</span> stomach = <span class="string">&#x27;胃&#x27;</span>    </span><br><span class="line">    <span class="keyword">var</span> heartbeat = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;      </span><br><span class="line">      <span class="built_in">console</span>.log(heart + <span class="string">&#x27;跳&#x27;</span>)    </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="built_in">this</span>.name = name    </span><br><span class="line">    <span class="built_in">this</span>.color = color    </span><br><span class="line">    heartbeat()    </span><br><span class="line">    <span class="built_in">this</span>.jump = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;      </span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>)      </span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;我跳起来了~来追我啊&#x27;</span>)    </span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;  </span><br><span class="line">  cleanTheBody = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我会用唾液清洁身体&#x27;</span>)  </span><br><span class="line">  &#125;  </span><br><span class="line">  <span class="keyword">static</span> descript = <span class="string">&#x27;我这个类是用来生产出一只猫的&#x27;</span>  </span><br><span class="line">  <span class="keyword">static</span> actingCute () &#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>)    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;一听到猫我就想到了它会卖萌&#x27;</span>)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat.staticName = <span class="string">&#x27;staticName&#x27;</span></span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat(<span class="string">&#x27;guaiguai&#x27;</span>, <span class="string">&#x27;white&#x27;</span>) <span class="comment">// ❤️ 跳</span></span><br><span class="line"><span class="built_in">console</span>.log(guaiguai) <span class="comment">// Cat &#123; name: &#x27;guaiguai&#x27;, color: &#x27;white&#x27;, jump: function() &#123;&#125;, cleanTheBody: function () &#123;&#125; &#125;</span></span><br><span class="line">guaiguai.jump() <span class="comment">// Cat &#123; name: &#x27;guaiguai&#x27;, color: &#x27;white&#x27;, jump: function() &#123;&#125;, cleanTheBody: function () &#123;&#125; &#125; 我跳起来了~来追我啊</span></span><br><span class="line">guaiguai.cleanTheBody() <span class="comment">// 我会用唾液清洁身体</span></span><br><span class="line"><span class="built_in">console</span>.log(guaiguai.descript) <span class="comment">// undefined</span></span><br><span class="line">guaiguai.actingCute() <span class="comment">// Uncaught TypeError: guaiguai.actingCute is not a function</span></span><br><span class="line">Cat.actingCute() <span class="comment">// class Cat&#123;...&#125; 一听到猫我就想到了它会卖萌</span></span><br><span class="line"><span class="built_in">console</span>.log(Cat.descript) <span class="comment">// 我这个类是用来生产出一只猫的</span></span><br><span class="line"><span class="built_in">console</span>.log(Cat.staticName) <span class="comment">// staticName</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="4-类不存在提升机制"><a href="#4-类不存在提升机制" class="headerlink" title="4. 类不存在提升机制"></a>4. 类不存在提升机制</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> A()</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a) <span class="comment">// A &#123;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b = <span class="keyword">new</span> B()</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;&#125;</span><br><span class="line"><span class="built_in">console</span>.log(b) <span class="comment">// Uncaught ReferenceError: Cannot access &#x27;B&#x27; before initialization</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> B <span class="comment">// function</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="5-class里面的this指向问题"><a href="#5-class里面的this指向问题" class="headerlink" title="5. class里面的this指向问题"></a>5. class里面的this指向问题</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">constructor</span> () &#123;    </span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;guaiguai&#x27;</span>    </span><br><span class="line">    <span class="keyword">var</span> type = <span class="string">&#x27;constructor&#x27;</span>  </span><br><span class="line">  &#125;  </span><br><span class="line">  type = <span class="string">&#x27;class&#x27;</span>  </span><br><span class="line">  getType = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.type)    </span><br><span class="line">    <span class="built_in">console</span>.log(type)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> type = <span class="string">&#x27;window&#x27;</span></span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat()</span><br><span class="line">guaiguai.getType() <span class="comment">// class window</span></span><br></pre></td></tr></table></figure>
+
+<p>调用getType函数的guaiguai, 所以里面的的this指向了guaiguai,而guaiguai的type为class<br>打印type时，因为没有这个变量，所以往外找，找到了window。<br>var type = ‘constructor’是函数constructor中的变量, 你也可以理解为是constructor函数的私有变量</p>
+<h5 id="6-class里的箭头函数"><a href="#6-class里的箭头函数" class="headerlink" title="6. class里的箭头函数"></a>6. class里的箭头函数</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">constructor</span> () &#123;    </span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;guaiguai&#x27;</span>    </span><br><span class="line">    <span class="keyword">var</span> type = <span class="string">&#x27;constructor&#x27;</span>  </span><br><span class="line">  &#125;  </span><br><span class="line">  type = <span class="string">&#x27;class&#x27;</span>  </span><br><span class="line">  getType = <span class="function">() =&gt;</span> &#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.type)    </span><br><span class="line">    <span class="built_in">console</span>.log(type)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> type = <span class="string">&#x27;window&#x27;</span></span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat()</span><br><span class="line">guaiguai.getType() <span class="comment">// class window</span></span><br><span class="line"><span class="built_in">console</span>.log(guaiguai) <span class="comment">// Cat &#123; name: &#x27;guaiguai&#x27;, type: &#x27;class&#x27;, getType: function() &#123;&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果在构造函数使用了简头函数，this指向的这个实例对象</p>
+</blockquote>
+<h5 id="7-属性名和方法名相同"><a href="#7-属性名和方法名相同" class="headerlink" title="7. 属性名和方法名相同"></a>7. 属性名和方法名相同</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">constructor</span> () &#123;    </span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;cat1&#x27;</span>  </span><br><span class="line">  &#125;  </span><br><span class="line">  name = <span class="string">&#x27;cat2&#x27;</span>  </span><br><span class="line">  getName = <span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)  <span class="comment">// cat1</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat()</span><br><span class="line">cat.getName()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>constructor中定义的相同名称的属性和方法会覆盖class里面定义的</p>
+</blockquote>
+<h5 id="8-再加上原型对象的属性和方法"><a href="#8-再加上原型对象的属性和方法" class="headerlink" title="8. 再加上原型对象的属性和方法"></a>8. 再加上原型对象的属性和方法</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">constructor</span> () &#123;    </span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;cat1&#x27;</span>  </span><br><span class="line">  &#125;  </span><br><span class="line">  name = <span class="string">&#x27;cat2&#x27;</span>  </span><br><span class="line">  getName = <span class="function"><span class="keyword">function</span>  (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Cat.prototype.name = <span class="string">&#x27;cat3&#x27;</span></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat()</span><br><span class="line">cat.getName()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>还是以constructor中的为准</p>
+</blockquote>
+<h5 id="9-箭头函数和方法名相同综合例子"><a href="#9-箭头函数和方法名相同综合例子" class="headerlink" title="9. 箭头函数和方法名相同综合例子"></a>9. 箭头函数和方法名相同综合例子</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;  </span><br><span class="line">  <span class="keyword">constructor</span> () &#123;    </span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;guaiguai&#x27;</span>    </span><br><span class="line">    <span class="keyword">var</span> type = <span class="string">&#x27;constructor&#x27;</span>    </span><br><span class="line">    <span class="built_in">this</span>.getType = <span class="function">() =&gt;</span> &#123;      </span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>.type)      </span><br><span class="line">      <span class="built_in">console</span>.log(type)    </span><br><span class="line">    &#125;  </span><br><span class="line">  &#125;  </span><br><span class="line">  type = <span class="string">&#x27;class&#x27;</span>  </span><br><span class="line">  getType = <span class="function">() =&gt;</span> &#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.type)    </span><br><span class="line">    <span class="built_in">console</span>.log(type)  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> type = <span class="string">&#x27;window&#x27;</span></span><br><span class="line"><span class="keyword">var</span> guaiguai = <span class="keyword">new</span> Cat()</span><br><span class="line">guaiguai.getType() <span class="comment">// class constructor</span></span><br><span class="line"><span class="built_in">console</span>.log(guaiguai) <span class="comment">// Cat &#123; name: &#x27;guaiguai&#x27;, getType: function() &#123;&#125;, type: &#x27;class&#x27;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="10-总结class"><a href="#10-总结class" class="headerlink" title="10. 总结class"></a>10. 总结class</h5><h6 id="class的基本概念："><a href="#class的基本概念：" class="headerlink" title="class的基本概念："></a>class的基本概念：</h6><ul>
+<li>当你使用class的时候，它会默认调用constructor这个函数，来接受一些参数，并构造一个新的实例对象（this）并将它返回</li>
+<li>当你的class没有定义constructor,也会隐式生产一个constructor方法</li>
+</ul>
+<h6 id="class几种定义属性的区别："><a href="#class几种定义属性的区别：" class="headerlink" title="class几种定义属性的区别："></a>class几种定义属性的区别：</h6><ul>
+<li>在constructor中var一个变量，这个变量只存在于constructor这个构造函数中</li>
+<li>在constructor中使用this定义的属性和方法，会被定义到实例上面</li>
+<li>在class使用=来定义一个属性和方法，和上面相同，会被定义到实例上面</li>
+<li>在class直接定一个方法，会被添加到原型对象prototype上</li>
+<li>在class中使用static修饰符定义的属性和方法被认为是静态的，被添加到类本身，不会添加到实例上</li>
+</ul>
+<h6 id="other"><a href="#other" class="headerlink" title="other"></a>other</h6><ul>
+<li>class虽然是函数，但并不会向函数一样提升至作用域最顶端</li>
+<li>如遇class中尖头函数题目请参考构造函数来处理</li>
+<li>使用class生成的实例对象，也有会沿着原型链查找的功能</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%B0%81%E8%A3%85-class/" rel="tag"># 封装, class</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/25/%E6%B5%8F%E8%A7%88%E5%99%A8/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" rel="prev" title="同源策略">
+      <i class="fa fa-chevron-left"></i> 同源策略
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%81%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">封装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7%E5%92%8C%E5%85%AC%E6%9C%89%E5%B1%9E%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">1. 私有属性和公有属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7%E6%96%B9%E6%B3%95%E5%92%8C%E5%85%AC%E6%9C%89%E5%B1%9E%E6%80%A7%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">2.静态属性方法和公有属性方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E5%AE%9E%E4%BE%8B%E8%87%AA%E8%BA%AB%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">3.实例自身的属性和构造函数的原型对象的属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-%E5%AE%9E%E4%BE%8B%E8%87%AA%E8%BA%AB%E5%B1%9E%E6%80%A7%E5%92%8C%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7%E5%8C%BA%E5%88%AB"><span class="nav-number">1.4.</span> <span class="nav-text">4. 实例自身属性和构造函数原型对象的属性区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-%E6%A3%80%E6%9F%A5%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%98%AF%E5%90%A6%E6%8E%8C%E6%8F%A1"><span class="nav-number">1.5.</span> <span class="nav-text">5. 检查上面的是否掌握</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-%E5%A6%82%E6%9E%9C%E5%AE%9E%E4%BE%8B%E8%87%AA%E8%BA%AB%E5%B1%9E%E6%80%A7%E5%92%8C%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7%E9%87%8D%E5%90%8D"><span class="nav-number">1.6.</span> <span class="nav-text">6. 如果实例自身属性和构造函数原型对象的属性重名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.7.</span> <span class="nav-text">7. 实例的原型对象的原型对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-Object-prototype%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.8.</span> <span class="nav-text">8. Object.prototype的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#9-%E6%80%BB%E7%BB%93-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">1.9.</span> <span class="nav-text">9. 总结 - 构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7%E3%80%81%E5%85%AC%E6%9C%89%E5%B1%9E%E6%80%A7%E3%80%81%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="nav-number">1.9.1.</span> <span class="nav-text">1. 私有属性、公有属性、静态属性概念：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-%E5%AE%9E%E4%BE%8B%E5%AF%B9%E8%B1%A1%E4%B8%8A%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7%EF%BC%9A"><span class="nav-number">1.9.2.</span> <span class="nav-text">2. 实例对象上的属性和构造函数原型对象的属性：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-%E9%81%8D%E5%8E%86%E5%AE%9E%E4%BE%8B%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">1.9.3.</span> <span class="nav-text">3. 遍历实例对象属性的方法：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ES6%E4%B9%8B%E5%90%8E%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">ES6之后的封装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%B0%86%E4%B8%8A%E9%9D%A2%E4%BE%8B%E5%AD%901%E6%8D%A2%E6%88%90class%E7%89%88%E6%9C%AC"><span class="nav-number">2.1.</span> <span class="nav-text">1. 将上面例子1换成class版本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%BC%84%E6%87%82%E5%9C%A8%E7%B1%BB%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">2. 弄懂在类中定义属性和方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E5%9C%A8class%E5%AE%9A%E4%B9%89%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">3. 在class定义静态属性和方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-%E7%B1%BB%E4%B8%8D%E5%AD%98%E5%9C%A8%E6%8F%90%E5%8D%87%E6%9C%BA%E5%88%B6"><span class="nav-number">2.4.</span> <span class="nav-text">4. 类不存在提升机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-class%E9%87%8C%E9%9D%A2%E7%9A%84this%E6%8C%87%E5%90%91%E9%97%AE%E9%A2%98"><span class="nav-number">2.5.</span> <span class="nav-text">5. class里面的this指向问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-class%E9%87%8C%E7%9A%84%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0"><span class="nav-number">2.6.</span> <span class="nav-text">6. class里的箭头函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-%E5%B1%9E%E6%80%A7%E5%90%8D%E5%92%8C%E6%96%B9%E6%B3%95%E5%90%8D%E7%9B%B8%E5%90%8C"><span class="nav-number">2.7.</span> <span class="nav-text">7. 属性名和方法名相同</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-%E5%86%8D%E5%8A%A0%E4%B8%8A%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">2.8.</span> <span class="nav-text">8. 再加上原型对象的属性和方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#9-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E5%92%8C%E6%96%B9%E6%B3%95%E5%90%8D%E7%9B%B8%E5%90%8C%E7%BB%BC%E5%90%88%E4%BE%8B%E5%AD%90"><span class="nav-number">2.9.</span> <span class="nav-text">9. 箭头函数和方法名相同综合例子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#10-%E6%80%BB%E7%BB%93class"><span class="nav-number">2.10.</span> <span class="nav-text">10. 总结class</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#class%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="nav-number">2.10.1.</span> <span class="nav-text">class的基本概念：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#class%E5%87%A0%E7%A7%8D%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9A"><span class="nav-number">2.10.2.</span> <span class="nav-text">class几种定义属性的区别：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#other"><span class="nav-number">2.10.3.</span> <span class="nav-text">other</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">一个蜜</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/chenmimimi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;chenmimimi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一个蜜</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = '';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'gY1RTI22stkCSVU2vQltfE69-gzGzoHsz',
+      appKey     : 'NRBienzHu7QyfjcMaAeWSssh',
+      placeholder: "说点什么呢",
+      avatar     : 'robohash',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-CN' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
